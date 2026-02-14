@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Feliz San Valentín L&V ❤️</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+  margin:0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg,#ff758c,#ff7eb3);
+  color:#fff;
+  text-align:center;
+  overflow-x:hidden;
+}
+.lock-screen,.content{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  padding:20px;
+  gap:14px;
+}
+.card{
+  width:min(560px,92vw);
+  background: rgba(255,255,255,.14);
+  backdrop-filter: blur(8px);
+  border-radius:18px;
+  padding:22px 18px;
+  box-shadow:0 12px 30px rgba(0,0,0,.18);
+}
+.btn{
+  margin-top:12px;
+  padding:12px 30px;
+  border-radius:25px;
+  border:none;
+  background:#fff;
+  color:#ff4d6d;
+  font-size:1em;
+  cursor:pointer;
+}
+.btn:hover{ transform:scale(1.05); }
+
+input{
+  padding:12px;
+  border-radius:20px;
+  border:none;
+  text-align:center;
+  width:260px;
+}
+
+.video-mobile{
+  width:100vw;
+  height:100vh;
+  background:#000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.video-mobile video{
+  width:100%;
+  height:auto;
+  max-height:100%;
+  object-fit:contain;
+}
+
+#errorMsg{display:none;font-weight:700;}
+
+.float-heart{
+  position:fixed;
+  bottom:-30px;
+  animation: floatUp linear forwards;
+  pointer-events:none;
+}
+@keyframes floatUp{
+  to{ transform:translateY(-120vh); opacity:0;}
+}
+
+/* Carta */
+#cartaModal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.55);
+  padding:16px;
+  z-index:999;
+}
+.carta{
+  max-width:620px;
+  margin:8vh auto;
+  background:rgba(255,255,255,.14);
+  backdrop-filter:blur(10px);
+  border-radius:18px;
+  padding:18px;
+  text-align:left;
+}
+
+/* Galería */
+.gallery-frame{
+  width:100%;
+  max-width:520px;
+  aspect-ratio:16/10;
+  border-radius:16px;
+  overflow:hidden;
+}
+.gallery-frame img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+/* Zona botones graciosos */
+#zonaBotones{
+  position:relative;
+  height:150px;
+  margin-top:20px;
+}
+#btnNo{
+  position:absolute;
+}
+</style>
+</head>
+
+<body>
+
+<!-- 🔒 CONTRASEÑA -->
+<div class="lock-screen" id="lock">
+  <div class="card">
+    <h1>💖 Solo para ti 💖</h1>
+    <p>Ingresa nuestra contraseña</p>
+    <input id="password" type="password" placeholder="Contraseña ❤️">
+    <button class="btn" onclick="checkPassword()">Entrar</button>
+    <div id="errorMsg">❌ Contraseña incorrecta</div>
+  </div>
+</div>
+
+<!-- ❤️ CONTENIDO -->
+<div class="content" id="content" style="display:none;">
+
+  <div class="card">
+    <h1>Feliz 14 de Febrero ❤️</h1>
+    <p>No importa la distancia, siempre estás en mi corazón.
+        Este detalle es solo para recordarte cuánto TE AMO 💕</p>
+  </div>
+
+  <!-- 🎬 VIDEO -->
+  <div class="video-mobile">
+    <video controls playsinline>
+      <source src="video.mp4" type="video/mp4">
+    </video>
+  </div>
+
+  <!-- 💌 MENSAJE -->
+  <div class="card">
+    <button class="btn" onclick="mostrarAmor()">Presiona aquí 😘</button>
+    <div id="mensajeAmor" style="display:none;font-weight:800;">
+      💖 Te amo hoy, mañana y siempre 💖
+    </div>
+
+    <button class="btn" onclick="abrirCarta()">💌 Leer mi carta</button>
+
+    <hr style="opacity:.3;margin:18px 0;">
+
+    <p><strong>¿Quieres seguir construyendo una vida conmigo?</strong></p>
+
+    <div id="zonaBotones">
+      <button class="btn" onclick="aceptarSi()">Sí 💖</button>
+      <button id="btnNo" class="btn">No 😅</button>
+    </div>
+
+    <div id="respuestaFinal" style="display:none;font-weight:700;margin-top:10px;"></div>
+  </div>
+
+  <!-- 🖼️ GALERÍA -->
+  <div class="card">
+    <h2>Nuestros momentos 📸</h2>
+    <div class="gallery-frame">
+      <img id="galleryImg" src="foto1.jpg">
+    </div>
+    <p id="contadorFotos" style="margin-top:8px;font-weight:600;">
+      Foto 1 de 9
+    </p>
+    <button class="btn" onclick="prevFoto()">⬅️</button>
+    <button class="btn" onclick="nextFoto()">➡️</button>
+  </div>
+
+</div>
+
+<!-- 💌 CARTA -->
+<div id="cartaModal" onclick="cerrarCarta(event)">
+  <div class="carta">
+    <h2>💌 Mi carta para ti</h2>
+    <p>
+      Mi amor,<br><br>
+      Aunque ahora no todo sea perfecto,
+      quiero que sepas que sigo aquí,
+      con el mismo amor y las mismas ganas.<br><br>
+      Sé que vamos a sobrepasar cualquier obstáculo, 
+      sabiamos que la distancia iba ser aún más díficil
+      pero quiero que lo logremos lo que tanto anhelamos JUNTAS.
+      Quiero cumplir cada sueño y cada meta a tu lado.<br><br>
+      No sabes lo mucho que te extraño :c y lo que daría por tenerte
+      aunque sea esta noche y hagamos el amor con tanta pasión.<br><br>
+      TE AMO y mi corazón no dejará de amarte hasta el último latido de mi corazón.<br><br>
+
+      — L&V x 100pre ❤️
+    </p>
+    <button class="btn" onclick="cerrarCarta()">Cerrar</button>
+  </div>
+</div>
+
+<script>
+/* 🔐 CLAVE */
+const CLAVE = "210518";
+
+/* 📸 9 FOTOS */
+const fotos = [
+  "foto1.jpg",
+  "foto2.jpg",
+  "foto3.jpg",
+  "foto4.jpg",
+  "foto5.jpg",
+  "foto6.jpg",
+  "foto7.jpg",
+  "foto8.jpg",
+  "foto9.jpg"
+];
+let idx = 0;
+
+/* CONTRASEÑA */
+function checkPassword(){
+  if(password.value === CLAVE){
+    lock.style.display="none";
+    content.style.display="flex";
+    asegurarBotones();
+  }else{
+    errorMsg.style.display="block";
+  }
+}
+
+/* MENSAJE */
+function mostrarAmor(){
+  mensajeAmor.style.display="block";
+  lanzarCorazones();
+}
+
+/* CARTA */
+function abrirCarta(){ cartaModal.style.display="block"; }
+function cerrarCarta(e){
+  if(!e || e.target.id==="cartaModal")
+    cartaModal.style.display="none";
+}
+
+/* GALERÍA */
+function actualizarFoto(){
+  galleryImg.src = fotos[idx];
+  contadorFotos.textContent = `Foto ${idx + 1} de ${fotos.length}`;
+}
+function nextFoto(){
+  idx = (idx + 1) % fotos.length;
+  actualizarFoto();
+}
+function prevFoto(){
+  idx = (idx - 1 + fotos.length) % fotos.length;
+  actualizarFoto();
+}
+
+/* CORAZONES */
+function lanzarCorazones(){
+  for(let i=0;i<12;i++){
+    const h=document.createElement("div");
+    h.className="float-heart";
+    h.textContent="💖";
+    h.style.left=Math.random()*100+"vw";
+    h.style.fontSize=(14+Math.random()*20)+"px";
+    h.style.animationDuration=(2+Math.random()*2)+"s";
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(),3000);
+  }
+}
+
+/* 😂 BOTÓN GRACIOSO */
+let btnNo,zona;
+function asegurarBotones(){
+  btnNo=document.getElementById("btnNo");
+  zona=document.getElementById("zonaBotones");
+  moverNo();
+  btnNo.addEventListener("mouseenter", moverNo);
+  btnNo.addEventListener("touchstart", e=>{e.preventDefault(); moverNo();},{passive:false});
+  btnNo.addEventListener("click", moverNo);
+}
+function moverNo(){
+  const x=Math.random()*(zona.offsetWidth-btnNo.offsetWidth);
+  const y=Math.random()*(zona.offsetHeight-btnNo.offsetHeight);
+  btnNo.style.left=x+"px";
+  btnNo.style.top=y+"px";
+}
+function aceptarSi(){
+  respuestaFinal.style.display="block";
+  respuestaFinal.innerHTML="💖 Sabía que dirías que sí 😌<br>Gracias por elegirnos.";
+  lanzarCorazones();
+}
+</script>
+
+</body>
+</html>
+
